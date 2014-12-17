@@ -12,10 +12,10 @@ import java.util.Queue;
  */
 public class UpdateWorldThread extends Thread
 {
-    private final int SLEEP_DURATION = 10;
     private SimDisplay display;
     private World world;
     private Queue<Entity> additions, removals;
+    private int ticksSinceLastDay;
 
     public UpdateWorldThread(SimDisplay display, World world)
     {
@@ -24,6 +24,7 @@ public class UpdateWorldThread extends Thread
         this.setName("Update World Thread");
         additions = new LinkedList<>();
         removals = new LinkedList<>();
+        ticksSinceLastDay = 0;
     }
 
     public void run()
@@ -37,18 +38,21 @@ public class UpdateWorldThread extends Thread
                 creatures.add(currAdditions.remove());
             for (int i = 0; i < currRemovals.size(); i++)
                 creatures.remove(currRemovals.remove());
-            synchronized(creatures)
+            for (Entity e : creatures)
             {
-                for (int i = 0; i < creatures.size(); i++)
-                {
-                    Entity currEntity = creatures.get(i);
-                    currEntity.update();
-                }
+                e.updateOnTick();
+            }
+            if(++ticksSinceLastDay % World.TICKS_PER_WORLD_DAY == 0)
+            {
+                System.out.println("Day passed");
+                for (Entity e : creatures)
+                    e.updateOnDay();
+                ticksSinceLastDay = 0;
             }
             display.repaint();
             try
             {
-                sleep(SLEEP_DURATION);
+                sleep(World.TIME_PER_TICK);
             } catch (InterruptedException ex)
             {
                 System.err.println("Something happened...");

@@ -3,12 +3,6 @@ package worldsim.entities;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import worldsim.World;
 
 /**
@@ -42,7 +36,8 @@ public abstract class Entity
     }
     
     public abstract Color getColor();
-    public abstract void update();
+    public abstract void updateOnTick();
+    public abstract void updateOnDay();
     public abstract Dimension getSize();
     public abstract String toString();
 }

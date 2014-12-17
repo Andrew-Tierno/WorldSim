@@ -1,5 +1,6 @@
 package worldsim;
 
+import java.awt.Color;
 import worldsim.entities.Entity;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,6 +19,8 @@ import javax.swing.JFrame;
 public class SimDisplay extends JComponent
 {
     protected JFrame frame;
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+    
     public SimDisplay()
     {
         frame = new JFrame("World Sim");
@@ -34,6 +37,7 @@ public class SimDisplay extends JComponent
     protected void paintComponent(Graphics g)
     {
         Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(BACKGROUND_COLOR);
         g2.fillRect(0, 0, getWidth(), getHeight());
         LinkedList<Entity> creatures = World.getInstance().getEntities();
         synchronized(creatures)

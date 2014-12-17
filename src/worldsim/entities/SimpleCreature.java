@@ -28,7 +28,7 @@ public class SimpleCreature extends Creature
     }
     
     @Override
-    public void update()
+    public void updateOnTick()
     {
         if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
             destination = randomDestination();
@@ -36,6 +36,11 @@ public class SimpleCreature extends Creature
                                     destination.getX() - getX());
         setX((int) (getX() + MOVE_STEP * Math.cos(angle)));
         setY((int) (getY() + MOVE_STEP * Math.sin(angle)));
+    }
+    
+    public void updateOnDay()
+    {
+        
     }
 
     public Dimension getSize()

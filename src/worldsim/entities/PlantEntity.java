@@ -12,8 +12,8 @@ import worldsim.World;
  */
 public class PlantEntity extends Entity
 {
-    private int timeSincePollenation;
-    private final int POLLENATION_CYCLE_TIME = 500;
+    private int daysSinceLastPollenation;
+    private final int POLLENATION_CYCLE_DAYS = 5;
     private final double POLLENATION_SUCCESS_CHANCE = 0.6;
     private final int MAX_SEEDS = 3;
     private final int MAX_SEED_DISTANCE = 50;
@@ -22,7 +22,7 @@ public class PlantEntity extends Entity
     public PlantEntity(int x, int y)
     {
         super(x, y);
-        timeSincePollenation = 0;
+        daysSinceLastPollenation = 0;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class PlantEntity extends Entity
     }
 
     @Override
-    public void update()
+    public void updateOnTick()
     {
-        if (timeSincePollenation > POLLENATION_CYCLE_TIME)
+        if (daysSinceLastPollenation > POLLENATION_CYCLE_DAYS)
         {
             if (Math.random() < POLLENATION_SUCCESS_CHANCE)
             {
@@ -52,11 +52,14 @@ public class PlantEntity extends Entity
                     }
                     catch (Exception ex) {}
                 }
-                timeSincePollenation = 0;
+                daysSinceLastPollenation = 0;
             }
         }
-        else
-            timeSincePollenation++;
+    }
+    
+    public void updateOnDay()
+    {
+        daysSinceLastPollenation++;
     }
 
     @Override

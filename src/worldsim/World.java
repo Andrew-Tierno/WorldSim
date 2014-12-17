@@ -17,7 +17,8 @@ public class World
     private static UpdateWorldThread updateThread;
     public static final int SIZE_X = 400;
     public static final int SIZE_Y = 400;
-    public static final long WORLD_HEARTBEAT = 1000;
+    public static final long TIME_PER_TICK = 10;
+    public static final int TICKS_PER_WORLD_DAY = 500;
     
     private World()
     {

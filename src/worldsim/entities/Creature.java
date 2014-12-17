@@ -14,6 +14,8 @@ import worldsim.World;
 public abstract class Creature extends Entity
 {
     protected Point destination;
+    protected int hungerLevel;
+    protected int starvationLevel;
     
     public Creature(int x, int y)
     {

@@ -18,14 +18,21 @@ public class WorldSim
     public static void main(String[] args)
     {
         SimDisplay d = new SimDisplay();
-        SimpleCreature tweedle = new SimpleCreature(0, 0);
-        SimpleCreature dum = new SimpleCreature(50, 50);
-        HunterCreature beast = new HunterCreature(80, 80);
-        PlantEntity plant = new PlantEntity(0, 20);
-        d.addCreature(tweedle);
-        d.addCreature(dum);
-        d.addCreature(beast);
-        d.addCreature(plant);
+        int numSimple = (int)(Math.random() * 6) + 4;
+        int numHunter = (int)(Math.random() * 2) + 1;
+        int numPlants = (int)(Math.random() * 2) + 1;
+        
+        for (int i = 0; i < numSimple; i++)
+            d.addCreature(new SimpleCreature((int)(World.SIZE_X * (Math.random() * 2 - 1)),
+                                        (int)(World.SIZE_Y * (Math.random() * 2 - 1))));
+        for (int i = 0; i < numHunter; i++)
+            d.addCreature(new HunterCreature((int)(World.SIZE_X * (Math.random() * 2 - 1)),
+                                        (int)(World.SIZE_Y * (Math.random() * 2 - 1))));
+        for (int i = 0; i < numPlants; i++)
+            d.addCreature(new PlantEntity((int)(World.SIZE_X * (Math.random() * 2 - 1)),
+                                        (int)(World.SIZE_Y * (Math.random() * 2 - 1))));
+        
+        
     }
 
 }

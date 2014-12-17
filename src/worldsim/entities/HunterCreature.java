@@ -19,12 +19,13 @@ public class HunterCreature extends Creature
     private final double DESTINATION_THRESHOLD = 20;
     private final double DESTINATION_THRESHOLD_SQUARED = DESTINATION_THRESHOLD * DESTINATION_THRESHOLD;
     private final double MOVE_STEP = 2;
-    private Point destination;
     
     public HunterCreature(int x, int y)
     {
         super(x, y);
         destination = randomDestination();
+        hungerLevel = 0;
+        starvationLevel = 5;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class HunterCreature extends Creature
     }
 
     @Override
-    public void update()
+    public void updateOnTick()
     {
         Entity target = getNearestCreature();
         if (target != null)
@@ -43,6 +44,7 @@ public class HunterCreature extends Creature
             if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
             {
                 target.kill();
+                hungerLevel = 0;
                 destination = randomDestination();
             }
         }
@@ -51,7 +53,12 @@ public class HunterCreature extends Creature
         double angle = Math.atan2(destination.getY() - getY(), destination.getX() - getX());
         setX((int) (getX() + MOVE_STEP * Math.cos(angle)));
         setY((int) (getY() + MOVE_STEP * Math.sin(angle)));
-        
+    }
+    
+    public void updateOnDay()
+    {
+        if (++hungerLevel > starvationLevel)
+            this.kill();
     }
 
     @Override
