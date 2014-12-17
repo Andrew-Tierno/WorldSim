@@ -16,16 +16,18 @@ public class HunterCreature extends Creature
 {
     private final double MAX_SEARCH_RADIUS = 75;
     private final double MAX_SEARCH_RADIUS_SQUARED = MAX_SEARCH_RADIUS * MAX_SEARCH_RADIUS;
-    private final double DESTINATION_THRESHOLD = 20;
+    private final double DESTINATION_THRESHOLD = 40;
     private final double DESTINATION_THRESHOLD_SQUARED = DESTINATION_THRESHOLD * DESTINATION_THRESHOLD;
-    private final double MOVE_STEP = 2;
     
     public HunterCreature(int x, int y)
     {
         super(x, y);
         destination = randomDestination();
-        hungerLevel = 0;
+        hunger = 0;
+        hungerLevel = 3;
         starvationLevel = 5;
+        isHungry = false;
+        moveStep = 2;
     }
 
     @Override
@@ -37,28 +39,35 @@ public class HunterCreature extends Creature
     @Override
     public void updateOnTick()
     {
-        Entity target = getNearestCreature();
-        if (target != null)
+        if (isHungry)
         {
-            destination = target.getLocation();
-            if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
+            Entity target = getNearestTarget();
+            if (target != null)
             {
-                target.kill();
-                hungerLevel = 0;
-                destination = randomDestination();
+                destination = target.getLocation();
+                if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
+                {
+                    target.kill();
+                    hunger = 0;
+                    isHungry = false;
+                }
             }
         }
-        else if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
+        if (getDistSquared(destination) < DESTINATION_THRESHOLD_SQUARED)
+        {
             destination = randomDestination();
+        }
         double angle = Math.atan2(destination.getY() - getY(), destination.getX() - getX());
-        setX((int) (getX() + MOVE_STEP * Math.cos(angle)));
-        setY((int) (getY() + MOVE_STEP * Math.sin(angle)));
+        setX((int) (getX() + moveStep * Math.cos(angle)));
+        setY((int) (getY() + moveStep * Math.sin(angle)));
     }
     
     public void updateOnDay()
     {
-        if (++hungerLevel > starvationLevel)
+        if (++hunger > starvationLevel)
             this.kill();
+        else if (hunger >= hungerLevel)
+            isHungry = true;
     }
 
     @Override
@@ -67,7 +76,7 @@ public class HunterCreature extends Creature
         return new Dimension(20, 20);
     }
 
-    private Entity getNearestCreature()
+    private Entity getNearestTarget()
     {
         LinkedList<Entity> creatures = World.getInstance().getEntities();
         Entity closestTarget = null;

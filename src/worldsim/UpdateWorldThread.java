@@ -16,6 +16,7 @@ public class UpdateWorldThread extends Thread
     private World world;
     private Queue<Entity> additions, removals;
     private int ticksSinceLastDay;
+    private int currDay;
 
     public UpdateWorldThread(SimDisplay display, World world)
     {
@@ -25,6 +26,7 @@ public class UpdateWorldThread extends Thread
         additions = new LinkedList<>();
         removals = new LinkedList<>();
         ticksSinceLastDay = 0;
+        currDay = 0;
     }
 
     public void run()
@@ -44,7 +46,8 @@ public class UpdateWorldThread extends Thread
             }
             if(++ticksSinceLastDay % World.TICKS_PER_WORLD_DAY == 0)
             {
-                System.out.println("Day passed");
+                System.out.println("Day " + ++currDay);
+                currDay++;
                 for (Entity e : creatures)
                     e.updateOnDay();
                 ticksSinceLastDay = 0;

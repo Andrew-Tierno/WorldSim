@@ -30,10 +30,12 @@ public class World
     }
     
     public LinkedList<Entity> getEntities() { return creatures; }
+    
     public void addEntity(Entity e)
     { 
         updateThread.addEntity(e);
     }
+    
     public void removeEntity(Entity e) 
     { 
         updateThread.removeEntity(e);
