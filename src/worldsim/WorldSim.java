@@ -17,10 +17,15 @@ public class WorldSim
      */
     public static void main(String[] args)
     {
+        generateWorld();
+    }
+
+    public static void generateWorld()
+    {
         SimDisplay d = new SimDisplay();
         int numSimple = (int)(Math.random() * 6) + 4;
         int numHunter = (int)(Math.random() * 2) + 1;
-        int numPlants = (int)(Math.random() * 4) + 5;
+        int numPlants = (int)(Math.random() * 4) + 7;
         
         for (int i = 0; i < numSimple; i++)
             d.addCreature(new SimpleCreature((int)(World.SIZE_X * (Math.random() * 2 - 1)),
@@ -34,5 +39,4 @@ public class WorldSim
         
         
     }
-
 }

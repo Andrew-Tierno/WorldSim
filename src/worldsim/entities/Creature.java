@@ -1,9 +1,7 @@
 package worldsim.entities;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
-import worldsim.World;
+import java.util.List;
 
 /**
  * 
@@ -15,25 +13,54 @@ public abstract class Creature extends Entity
 {
     protected Point destination;
     protected boolean isHungry;
-    protected int hunger;
-    protected int hungerLevel;
+    protected int currHunger;
+    protected int hungryLevel;
     protected int starvationLevel;
     protected int moveStep;
+    protected int fovRadius;
+    protected List<EntityType> predators;
+    protected List<EntityType> prey;
     
-    public Creature(int x, int y)
+    public Creature(int x, int y, EntityType type, int foodValue,
+                    int moveStep, int hungryLevel, int starvationLevel,
+                    int fovRadius, List<EntityType> predators, List<EntityType> prey)
     {
-        super(x, y);
+        super(x, y, type, foodValue);
+        this.moveStep = moveStep;
+        this.hungryLevel = hungryLevel;
+        this.starvationLevel = starvationLevel;
+        this.fovRadius = fovRadius;
+        this.predators = predators;
+        this.prey = prey;
+        currHunger = 0;
+        isHungry = false;
     }
     
-    protected double getDistSquared(Point p)
-    {
-        return (p.getX() - getX()) * (p.getX() - getX()) +
-                            (p.getY() - getY()) * (p.getY() - getY());
+    public List<EntityType> getPredators() { return predators; }
+    public List<EntityType> getPrey() { return prey; }
+    public int getFOV() { return fovRadius; }
+    public int getHungryLevel() { return hungryLevel; }
+    public int getStarvationLevel() { return starvationLevel; }
+    public int getCurrHunger() { return currHunger; }
+    public int getMoveStep() { return moveStep; }
+    
+    public void addHunger() { currHunger++; }
+    public void addHunger(int amt) { currHunger += amt; }
+    
+    public void rmvHunger() 
+    { 
+        if (currHunger > 0)
+            currHunger--; 
+    }
+    public void rmvHunger(int amt) { 
+        if (currHunger - amt > 0)
+            currHunger -= amt;
+        else
+            resetHunger();
     }
     
-    protected Point randomDestination()
-    {
-        return new Point((int)(2 * World.SIZE_X * Math.random()) - World.SIZE_X,
-                            (int)(2 * World.SIZE_Y * Math.random()) - World.SIZE_Y);
-    }
+    public void resetHunger() { currHunger = 0; }
+    
+    public boolean isHungry() { return currHunger >= hungryLevel; }
+    public boolean isStarving() { return currHunger >= starvationLevel; }
 }

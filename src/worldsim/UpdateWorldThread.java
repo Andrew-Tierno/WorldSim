@@ -47,7 +47,6 @@ public class UpdateWorldThread extends Thread
             if(++ticksSinceLastDay % World.TICKS_PER_WORLD_DAY == 0)
             {
                 System.out.println("Day " + ++currDay);
-                currDay++;
                 for (Entity e : creatures)
                     e.updateOnDay();
                 ticksSinceLastDay = 0;

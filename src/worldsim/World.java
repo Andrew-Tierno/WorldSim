@@ -2,6 +2,7 @@ package worldsim;
 
 import worldsim.entities.Entity;
 import java.util.LinkedList;
+import worldsim.utils.Point;
 
 /**
  * 
@@ -11,7 +12,7 @@ import java.util.LinkedList;
  */
 public class World
 {
-    private LinkedList<Entity> creatures;
+    private LinkedList<Entity> entities;
     private static World theWorld;
     private static SimDisplay display;
     private static UpdateWorldThread updateThread;
@@ -22,14 +23,14 @@ public class World
     
     private World()
     {
-        creatures = new LinkedList();
+        entities = new LinkedList();
         if (display == null)
             display = new SimDisplay();
         updateThread = new UpdateWorldThread(display, this);
         updateThread.start();
     }
     
-    public LinkedList<Entity> getEntities() { return creatures; }
+    public LinkedList<Entity> getEntities() { return entities; }
     
     public void addEntity(Entity e)
     { 
@@ -39,6 +40,20 @@ public class World
     public void removeEntity(Entity e) 
     { 
         updateThread.removeEntity(e);
+    }
+    
+    public LinkedList<Entity> getAllEntitiesInRadius(Point center, int radius)
+    {
+        LinkedList<Entity> foundEntities = new LinkedList<>();
+        int radiusSquared = radius * radius;
+        for (Entity e : entities)
+        {
+            if (center.distanceToSquared(e.getLocation()) <= radiusSquared)
+            {
+                foundEntities.add(e);
+            }
+        }
+        return foundEntities;
     }
     
     public static World getInstance()

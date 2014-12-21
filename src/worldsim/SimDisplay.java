@@ -1,14 +1,14 @@
 package worldsim;
 
 import java.awt.Color;
-import worldsim.entities.Entity;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import worldsim.entities.Entity;
+import worldsim.utils.Point;
 
 /**
  * 
@@ -46,14 +46,15 @@ public class SimDisplay extends JComponent
             {
                 g2.setColor(c.getColor());
                 Dimension creatureSize = c.getSize();
-                Point displayPoint = convertWorldPoint(new Point(c.getX(), c.getY()));
-                g2.fillRect(displayPoint.x, displayPoint.y, creatureSize.width, creatureSize.height);
+                Point displayPoint = convertWorldPoint(c.getLocation());
+                g2.fillRect(displayPoint.getX(), displayPoint.getY(), 
+                        creatureSize.width, creatureSize.height);
             } 
         }
     }
     
     private Point convertWorldPoint(Point worldPoint)
     {
-        return new Point(worldPoint.x + getWidth() / 2, - worldPoint.y + getHeight() / 2);
+        return new Point(worldPoint.getX() + getWidth() / 2, - worldPoint.getY() + getHeight() / 2);
     }
 }
