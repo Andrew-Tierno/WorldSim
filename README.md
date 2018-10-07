@@ -1,4 +1,4 @@
 WorldSim
 ========
 
-A simplistic (very rough) model of a working ecosystem
+A simple predator-prey-vegetation interaction model written in Java.
